@@ -106,8 +106,8 @@ def hashFile(handle, want_hex=False, limit=None, chunk_size=CHUNK_SIZE):
         in
     """
     fhash, read = hashlib.sha1(), 0
-    if isinstance(handle, basestring):
-        handle = file(handle, 'rb')
+    if isinstance(handle, str):
+        handle = open(handle, 'rb')
 
     if limit:
         chunk_size = min(chunk_size, limit)
@@ -250,7 +250,7 @@ def groupBy(groups_in, classifier, fun_desc='?', keep_uniques=False,
                       pos + 1, group_count, fun_desc, count, len(paths)
                   ))
 
-        for key, group in classifier(paths, *args, **kwargs).items():
+        for key, group in list(classifier(paths, *args, **kwargs).items()):
             groups.setdefault(key, set()).update(group)
             count += len(group)
 
@@ -439,11 +439,11 @@ def pruneUI(dupeList, mainPos=1, mainLen=1):
     :rtype: :class:`~__builtins__.int`
     """
     dupeList = sorted(dupeList)
-    print
+    print()
     for pos, val in enumerate(dupeList):
-        print "%d) %s" % (pos + 1, val)
+        print("%d) %s" % (pos + 1, val))
     while True:
-        choice = raw_input("[%s/%s] Keepers: " % (mainPos, mainLen)).strip()
+        choice = input("[%s/%s] Keepers: " % (mainPos, mainLen)).strip()
         if not choice:
             print ("Please enter a space/comma-separated list of numbers or "
                    "'all'.")
@@ -495,7 +495,7 @@ def print_defaults():
         value = DEFAULTS[key]
         if isinstance(value, (list, set)):
             value = ', '.join(value)
-        print "%*s: %s" % (maxlen, key, value)
+        print("%*s: %s" % (maxlen, key, value))
 
 def delete_dupes(groups, prefer_list=None, interactive=True, dry_run=False):
     """Code to handle the :option:`--delete` command-line option.
@@ -530,7 +530,7 @@ def delete_dupes(groups, prefer_list=None, interactive=True, dry_run=False):
 
         assert preferred  # Safety check
         for path in pruneList:
-            print "Removing %s" % path
+            print("Removing %s" % path)
             if not dry_run:
                 os.remove(path)
 
@@ -598,8 +598,8 @@ def main():
         delete_dupes(groups, opts.prefer, not opts.noninteractive,
                      opts.dry_run)
     else:
-        for dupeSet in groups.values():
-            print '\n'.join(dupeSet) + '\n'
+        for dupeSet in list(groups.values()):
+            print('\n'.join(dupeSet) + '\n')
 
 if __name__ == '__main__':
     main()
